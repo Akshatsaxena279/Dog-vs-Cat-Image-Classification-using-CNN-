@@ -1,0 +1,8 @@
+services:
+  - type: web
+    name: cat-dog-classifier
+    env: python
+    plan: free
+    region: ohio
+    buildCommand: "pip install -r requirements.txt"
+    startCommand: "gunicorn app:app"
