@@ -9,25 +9,28 @@
 <body>
     <div class="container">
         <h1>Cat vs. Dog Classifier</h1>
-        <p>Upload an image or let the model predict a random one from the test set.</p>
+        <p class="subtitle">Upload an image or let the model predict a random one from the test set.</p>
         
         <div class="upload-container">
-            <input type="file" id="image-upload" accept="image/*" style="display: none;">
-            <label for="image-upload" class="upload-label">Choose an Image</label>
-            <button id="random-predict-btn" class="upload-label">Predict Random Image</button>
+            <input type="file" id="image-upload" class="hidden" accept="image/*">
+            <label for="image-upload" class="btn">Choose an Image</label>
+            <button id="random-predict-btn" class="btn">Predict Random</button>
         </div>
         
-        <div id="image-preview" class="image-preview" style="display:none;">
+        <div id="image-preview" class="image-preview">
             <img id="preview-img" src="#" alt="Image Preview">
         </div>
+
+        <div id="loader-container" class="hidden">
+            <div class="loader"></div>
+            <span>Predicting...</span>
+        </div>
         
-        <div id="prediction-result" class="prediction-result" style="display:none;">
-            <h2 id="actual-class-title" style="display:none;">Actual: <span id="actual-class"></span></h2>
-            <h2>Prediction: <span id="predicted-class"></span></h2>
+        <div id="prediction-result" class="prediction-result">
+            <h2 id="actual-class-title" class="hidden">Actual: <span id="actual-class"></span></h2>
+            <h2><span id="predicted-class"></span></h2>
             <p>Confidence: <span id="confidence-score"></span></p>
         </div>
-
-        <div id="loader" class="loader" style="display:none;"></div>
     </div>
 
     <footer>
@@ -45,78 +48,92 @@
         const confidenceScore = document.getElementById('confidence-score');
         const actualClassTitle = document.getElementById('actual-class-title');
         const actualClass = document.getElementById('actual-class');
-        const loader = document.getElementById('loader');
+        const loaderContainer = document.getElementById('loader-container');
 
-        // Handle file upload
+        function showLoader() {
+            loaderContainer.classList.remove('hidden');
+        }
+
+        function hideLoader() {
+            loaderContainer.classList.add('hidden');
+        }
+
+        function resetUI() {
+            predictionResult.classList.remove('visible');
+            actualClassTitle.classList.add('hidden');
+            imagePreview.classList.remove('visible');
+        }
+
+        function handlePrediction(file) {
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                previewImg.src = e.target.result;
+                resetUI();
+                imagePreview.classList.add('visible');
+                showLoader();
+                
+                const formData = new FormData();
+                formData.append('file', file);
+
+                fetch('/predict', {
+                    method: 'POST',
+                    body: formData
+                })
+                .then(response => response.json())
+                .then(data => {
+                    hideLoader();
+                    if (data.error) {
+                        predictedClass.textContent = 'Error';
+                        confidenceScore.textContent = data.error;
+                    } else {
+                        predictedClass.textContent = data.prediction;
+                        confidenceScore.textContent = data.confidence;
+                    }
+                    predictionResult.classList.add('visible');
+                })
+                .catch(error => {
+                    hideLoader();
+                    predictedClass.textContent = 'Error';
+                    confidenceScore.textContent = 'An error occurred during prediction.';
+                    predictionResult.classList.add('visible');
+                });
+            }
+            reader.readAsDataURL(file);
+        }
+
         imageUpload.addEventListener('change', function(event) {
             const file = event.target.files[0];
             if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    previewImg.src = e.target.result;
-                    imagePreview.style.display = 'block';
-                    predictionResult.style.display = 'none';
-                    actualClassTitle.style.display = 'none';
-                    loader.style.display = 'block';
-                    
-                    const formData = new FormData();
-                    formData.append('file', file);
-
-                    fetch('/predict', {
-                        method: 'POST',
-                        body: formData
-                    })
-                    .then(response => response.json())
-                    .then(data => {
-                        loader.style.display = 'none';
-                        if (data.error) {
-                            predictedClass.textContent = 'Error';
-                            confidenceScore.textContent = data.error;
-                        } else {
-                            predictedClass.textContent = data.prediction;
-                            confidenceScore.textContent = data.confidence;
-                        }
-                        predictionResult.style.display = 'block';
-                    })
-                    .catch(error => {
-                        loader.style.display = 'none';
-                        predictedClass.textContent = 'Error';
-                        confidenceScore.textContent = 'An error occurred during prediction.';
-                        predictionResult.style.display = 'block';
-                    });
-                }
-                reader.readAsDataURL(file);
+                handlePrediction(file);
             }
         });
 
-        // Handle random prediction
         randomPredictBtn.addEventListener('click', function() {
-            imagePreview.style.display = 'block';
-            predictionResult.style.display = 'none';
-            actualClassTitle.style.display = 'none';
-            loader.style.display = 'block';
+            resetUI();
+            showLoader();
 
             fetch('/predict_random')
                 .then(response => response.json())
                 .then(data => {
-                    loader.style.display = 'none';
+                    hideLoader();
                     if (data.error) {
                         predictedClass.textContent = 'Error';
                         confidenceScore.textContent = data.error;
                     } else {
                         previewImg.src = data.image_data;
+                        imagePreview.classList.add('visible');
                         predictedClass.textContent = data.prediction;
                         confidenceScore.textContent = data.confidence;
                         actualClass.textContent = data.actual.charAt(0).toUpperCase() + data.actual.slice(1);
-                        actualClassTitle.style.display = 'block';
+                        actualClassTitle.classList.remove('hidden');
                     }
-                    predictionResult.style.display = 'block';
+                    predictionResult.classList.add('visible');
                 })
                 .catch(error => {
-                    loader.style.display = 'none';
+                    hideLoader();
                     predictedClass.textContent = 'Error';
                     confidenceScore.textContent = 'An error occurred during prediction.';
-                    predictionResult.style.display = 'block';
+                    predictionResult.classList.add('visible');
                 });
         });
     </script>
