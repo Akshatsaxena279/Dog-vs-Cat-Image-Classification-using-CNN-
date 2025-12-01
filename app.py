@@ -11,7 +11,7 @@ import requests
 app = Flask(__name__)
 
 # --- Model Loading ---
-MODEL_URL = "YOUR_DIRECT_DOWNLOAD_LINK_HERE"  # <--- IMPORTANT: REPLACE THIS URL
+MODEL_URL = "https://drive.google.com/uc?export=download&id=1a4Rih30BD5QaZG44uzjAG0tMm7uLrEpP"  # <--- IMPORTANT: REPLACE THIS URL
 MODEL_PATH = "catvsdog_fixed.h5"
 
 def download_model():

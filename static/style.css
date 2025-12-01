@@ -7,6 +7,7 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
     min-height: 100vh;
@@ -87,4 +88,16 @@ p {
 @keyframes spin {
     0% { transform: rotate(0deg); }
     100% { transform: rotate(360deg); }
+}
+
+footer {
+    text-align: center;
+    padding: 1rem;
+    margin-top: auto;
+    color: #777;
+    font-size: 0.9rem;
+}
+
+footer p {
+    margin: 0.3rem 0;
 }
