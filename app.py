@@ -6,36 +6,18 @@ from flask import Flask, request, render_template, jsonify
 from tensorflow.keras.models import load_model
 import base64
 from io import BytesIO
-import requests
 
 app = Flask(__name__)
 
 # --- Model Loading ---
-MODEL_URL = "https://drive.google.com/uc?export=download&id=1a4Rih30BD5QaZG44uzjAG0tMm7uLrEpP"  # <--- IMPORTANT: REPLACE THIS URL
 MODEL_PATH = "catvsdog_fixed.h5"
 
-def download_model():
-    if not os.path.exists(MODEL_PATH):
-        print(f"Downloading model from {MODEL_URL}...")
-        try:
-            response = requests.get(MODEL_URL, stream=True)
-            response.raise_for_status()
-            with open(MODEL_PATH, 'wb') as f:
-                for chunk in response.iter_content(chunk_size=8192):
-                    f.write(chunk)
-            print("✅ Model downloaded successfully.")
-        except Exception as e:
-            print(f"❌ Failed to download model: {e}")
-            return False
-    return True
-
-model = None
-if download_model():
-    try:
-        model = load_model(MODEL_PATH)
-        print("✅ Model loaded successfully.")
-    except Exception as e:
-        print(f"❌ Error loading model: {e}")
+try:
+    model = load_model(MODEL_PATH)
+    print("✅ Model loaded successfully.")
+except Exception as e:
+    print(f"❌ Error loading model: {e}")
+    model = None
 # --- End Model Loading ---
 
 
