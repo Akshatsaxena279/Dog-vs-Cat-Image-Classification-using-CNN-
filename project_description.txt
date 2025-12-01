@@ -1,0 +1,54 @@
+A detailed list of requirements for your Cat vs Dog Image Classification Project using CNN 
+                                — including libraries, tools, files, and their usage:
+ 1 . Dataset
+  Kaggle – Dogs vs Cats
+  Path Used: You downloaded and extracted it to:
+  ./dogs-vs-cats/
+
+  Contents:
+   train/ → 25,000 labeled images (cat.*.jpg, dog.*.jpg)
+   test/ → 12,500 images for testing (unlabeled)
+
+2. Deep Learning Framework
+ TensorFlow & Keras
+Installed via: pip install tensorflow
+
+Used For:
+  Building the CNN architecture
+  Training and compiling the model
+  Saving/loading model using model.save() and load_model()
+
+3. Python Libraries:
+                          NumPy
+                          Matplotlib
+                          OS
+                          Pickle
+                          PIL (Pillow)
+                          Jupyter Notebook
+
+5. File Structure Used:
+
+dogs-vs-cats/
+  ├── train/
+  │   ├── cat.0.jpg
+  │   ├── dog.0.jpg
+  ├── test/
+  │   ├── 1.jpg
+  ├── saved_model/
+  │   └── catvsdog_fixed.h5
+
+ 6. Saved Files:
+
+File                                            Description                                         
+catvsdog_fixed.h5          Trained model file             
+
+8. Accuracy & Loss Plot:
+       Trained model achieved ~98.8% training accuracy
+       Plotted using matplotlib:
+                          Train vs Val Accuracy
+                          Train vs Val Loss
+
+Final Summary (For Report)
+This project builds and trains a Convolutional Neural Network (CNN) to classify images of cats and dogs. Using TensorFlow/Keras and the Kaggle dataset,
+ the model achieved high accuracy through image preprocessing, model training, andevaluation. It also supports reusability through model and history saving.
+

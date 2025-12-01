@@ -1,0 +1,90 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+.container {
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    text-align: center;
+    max-width: 500px;
+    width: 90%;
+}
+
+h1 {
+    color: #444;
+    margin-bottom: 0.5rem;
+}
+
+p {
+    color: #666;
+    margin-bottom: 2rem;
+}
+
+.upload-container {
+    margin-bottom: 1.5rem;
+}
+
+.upload-label {
+    background-color: #007bff;
+    color: white;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.upload-label:hover {
+    background-color: #0056b3;
+}
+
+.image-preview {
+    margin-top: 1.5rem;
+    margin-bottom: 1.5rem;
+}
+
+#preview-img {
+    max-width: 100%;
+    max-height: 300px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+}
+
+.prediction-result {
+    margin-top: 1.5rem;
+}
+
+.prediction-result h2 {
+    color: #333;
+}
+
+.prediction-result p {
+    color: #555;
+    font-size: 1.1rem;
+}
+
+.loader {
+    border: 4px solid #f3f3f3;
+    border-radius: 50%;
+    border-top: 4px solid #3498db;
+    width: 40px;
+    height: 40px;
+    animation: spin 2s linear infinite;
+    margin: 1.5rem auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
